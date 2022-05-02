@@ -85,7 +85,7 @@ def make_adversial_network(generator, discriminator):
     discriminator.trainable = False
     gan = Sequential([generator, discriminator])
     gan.compile(loss='binary_crossentropy', optimizer='adam')
-    return gan  # , generator, discriminator
+    return gan 
 
 
 def generate_latent_noise(n):

@@ -12,11 +12,9 @@ import keras
 import data_preparation
 
 
-
 IMG_HW = 512
 
-
-def make_segmentor(kernel_size=1):
+def make_segmentor(kernel_size=3):
     inputs = keras.Input(shape=(IMG_HW, IMG_HW, 1))
 
     x = layers.Conv2D(64, kernel_size, strides=4, padding="same")(inputs)
@@ -48,7 +46,7 @@ def make_segmentor(kernel_size=1):
     return model
 
 
-def make_discriminator(kernel_size=1):
+def make_discriminator(kernel_size=3):
     inputs = keras.Input(shape=(IMG_HW, IMG_HW, 4))
 
     x = layers.Conv2D(64, kernel_size, strides=4, padding="same")(inputs)
@@ -77,22 +75,21 @@ def make_discriminator(kernel_size=1):
     return model
 
 
-def make_adversial_network(generator, discriminator):
-    # This will only be used for training the generator.
+def make_adversial_network(segmentor, discriminator):
+    # This will only be used for training the segmentor.
     # Note, the weights in the discriminator and generator are shared.
     discriminator.trainable = False
-    gan = Sequential([generator, discriminator])
-    gan.compile(loss='binary_crossentropy', optimizer='adam')
-    return gan  # , generator, discriminator
+    adv = Sequential([segmentor, discriminator])
+    adv.compile(loss='binary_crossentropy', optimizer='adam')
+    return adv 
 
 
-def train(imgs, segs, epochs=1, batch_size=64, path=''):
+def train(imgs, segs, epochs=1, batch_size=32, path=''):
 
     segmentor = make_segmentor()
     discriminator = make_discriminator()
     adversial_net = make_adversial_network(segmentor, discriminator)
 
-    # visualize_generator(0, segmentor, path=path)
     for epoch in range(epochs):
         print(f'Epoch {epoch+1}')
 
@@ -131,9 +128,9 @@ def train(imgs, segs, epochs=1, batch_size=64, path=''):
         print(f'Discriminator Loss: {discr_loss/batch_size}')
         print(f'Generator Loss:     {gen_loss/batch_size}')
 
-    segmentor.save("{}seg_{}.h5".format(path, epoch))
-    discriminator.save("{}disc_{}.h5".format(path, epoch))
-    adversial_net.save("{}adv_{}.h5".format(path, epoch))
+        segmentor.save("{}seg_{}.h5".format(path, epoch))
+        discriminator.save("{}disc_{}.h5".format(path, epoch))
+        adversial_net.save("{}adv_{}.h5".format(path, epoch))
 
 imgs, segs = data_preparation.load_data("JSRT_imgs", "JSRT_segs", relpath="./prepared_data/")
 train(imgs, segs, epochs=100, path="./savesMay2/")
