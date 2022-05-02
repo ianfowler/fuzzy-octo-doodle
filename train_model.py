@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras import layers
 import keras
+import data_preparation
+
+
 
 IMG_HW = 512
 
@@ -132,5 +135,5 @@ def train(imgs, segs, epochs=1, batch_size=64, path=''):
     discriminator.save("{}disc_{}.h5".format(path, epoch))
     adversial_net.save("{}adv_{}.h5".format(path, epoch))
 
-
-train(epochs=100, path="./saves/")
+imgs, segs = data_preparation.load_data("JSRT_imgs", "JSRT_segs", relpath="./prepared_data/")
+train(imgs, segs, epochs=100, path="./savesMay2/")
