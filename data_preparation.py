@@ -125,3 +125,7 @@ def load_data(imgName, segName, relpath="./"):
         segs = np.load(f)
 
     return imgs, segs
+
+
+if __name__ == "__main__":
+    save_all_data(relpath="./prepared_data")
