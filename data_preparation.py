@@ -128,4 +128,4 @@ def load_data(imgName, segName, relpath="./"):
 
 
 if __name__ == "__main__":
-    save_all_data(relpath="./prepared_data")
+    save_all_data(relpath="./prepared_data/")
