@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 
 import unet
@@ -36,23 +36,23 @@ trainer.fit(unet_model,
 
 
 # Plot a prediction
-prediction = unet_model.predict(validation_dataset.batch(batch_size=3))
-fig, ax = plt.subplots(3, 3, sharex=True, sharey=True, figsize=(10, 10))
-dataset = validation_dataset.map(
-    utils.crop_image_and_label_to_shape(prediction.shape[1:]))
+# prediction = unet_model.predict(validation_dataset.batch(batch_size=3))
+# fig, ax = plt.subplots(3, 3, sharex=True, sharey=True, figsize=(10, 10))
+# dataset = validation_dataset.map(
+#     utils.crop_image_and_label_to_shape(prediction.shape[1:]))
 
-for i, (image, label) in enumerate(dataset.take(3)):
-    ax[i][0].matshow(image[..., -1])
-    ax[i][0].set_title('Original Image')
-    ax[i][0].axis('off')
-    ax[i][1].matshow(np.argmax(label, axis=-1), cmap=plt.cm.gray)
-    ax[i][1].set_title('Original Mask')
-    ax[i][1].axis('off')
-    ax[i][2].matshow(np.argmax(prediction[i, ...], axis=-1), cmap=plt.cm.gray)
-    ax[i][2].set_title('Predicted Mask')
-    ax[i][2].axis('off')
-plt.tight_layout()
-plt.savefig("pred")
+# for i, (image, label) in enumerate(dataset.take(3)):
+#     ax[i][0].matshow(image[..., -1])
+#     ax[i][0].set_title('Original Image')
+#     ax[i][0].axis('off')
+#     ax[i][1].matshow(np.argmax(label, axis=-1), cmap=plt.cm.gray)
+#     ax[i][1].set_title('Original Mask')
+#     ax[i][1].axis('off')
+#     ax[i][2].matshow(np.argmax(prediction[i, ...], axis=-1), cmap=plt.cm.gray)
+#     ax[i][2].set_title('Predicted Mask')
+#     ax[i][2].axis('off')
+# plt.tight_layout()
+# plt.savefig("pred")
 
 # Save
 unet_model.save("unet_deep")
